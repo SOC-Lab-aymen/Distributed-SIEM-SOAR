@@ -60,11 +60,11 @@ The main objectives of this project are:
                          ┌───────────────────────┐
                          │    Wazuh Manager      │
                          │                       │
-                         │ • Log Collection       │
-                         │ • Decoders             │
-                         │ • Detection Rules      │
-                         │ • Correlation          │
-                         │ • Active Response      │
+                         │ • Log Collection      │
+                         │ • Decoders            │
+                         │ • Detection Rules     │
+                         │ • Correlation         │
+                         │ • Active Response     │
                          └───────────┬───────────┘
                                      │
                                      ▼
@@ -146,7 +146,7 @@ It can be used for:
 - Compliance monitoring
 - Security visualization
   
-#Traefik
+# Traefik
 
 Traefik is deployed as the reverse proxy and traffic-management layer.
 
@@ -162,17 +162,9 @@ Centralized service exposure
 
 Example architecture:
 
-                    Internet / LAN
-                          │
-                          ▼
-                    ┌───────────┐
-                    │  Traefik  │
-                    └─────┬─────┘
-                          │
-             ┌────────────┼────────────┐
-             │            │            │
-             ▼            ▼            ▼
-        Dashboard     Services      APIs
+<img width="2189" height="1501" alt="docker" src="https://github.com/user-attachments/assets/c4a2ef41-846c-45cd-bb1b-0282d4af3b3b" />
+
+
 
 
 
