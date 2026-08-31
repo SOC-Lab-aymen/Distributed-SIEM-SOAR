@@ -1,3 +1,5 @@
+<img width="3120" height="1200" alt="docker-container-architecture" src="https://github.com/user-attachments/assets/927bf693-99b4-4979-9ab2-5da310c6d78b" />
+<img width="3120" height="1200" alt="docker-container-architecture" src="https://github.com/user-attachments/assets/a50af988-c19e-4c7e-b280-bd4cd65890f7" />
 # Distributed-SIEM-Wazuh-using-Treafik
 
 A distributed Security Information and Event Management (SIEM) infrastructure built with Wazuh, Docker, and Traefik.
@@ -162,6 +164,81 @@ Centralized service exposure
 
 Example architecture:
 <img width="2875" height="1501" alt="traefik-architecture" src="https://github.com/user-attachments/assets/bada0108-8eb5-4e3b-a57c-823f748451dc" />
+
+# 🐳 Containerization
+
+The infrastructure is deployed using Docker.
+
+Example container architecture:
+
+<img width="3120" height="1200" alt="docker-container-architecture" src="https://github.com/user-attachments/assets/767a1888-e720-4164-9435-a19536e51a24" />
+
+Docker provides:
+
+- Isolation
+- Reproducible deployment
+- Simplified management
+- Service portability
+- Easy infrastructure recovery
+
+# 📁 Repository Structure
+
+distributed-siem-wazuh-traefik/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+│
+├── docs/
+│   ├── architecture/
+│   │   ├── architecture.drawio
+│   │   ├── architecture.png
+│   │   └── network-topology.png
+│   │
+│   ├── deployment/
+│   │   ├── installation.md
+│   │   ├── configuration.md
+│   │   └── troubleshooting.md
+│   │
+│   └── screenshots/
+│
+├── docker/
+│   ├── docker-compose.yml
+│   │
+│   ├── traefik/
+│   │   ├── traefik.yml
+│   │   └── dynamic/
+│   │       ├── routers.yml
+│   │       └── middlewares.yml
+│   │
+│   └── wazuh/
+│       ├── manager/
+│       ├── indexer/
+│       └── dashboard/
+│
+├── config/
+│   ├── wazuh/
+│   │   ├── rules/
+│   │   └── decoders/
+│   │
+│   └── traefik/
+│       ├── tls/
+│       └── middlewares/
+│
+├── scripts/
+│   ├── install.sh
+│   ├── backup.sh
+│   ├── restore.sh
+│   └── healthcheck.sh
+│
+│
+└── examples/
+    ├── failed-login.md
+    ├── ssh-bruteforce.md
+    └── malware-detection.md
+    
+  
+
 
 
 
