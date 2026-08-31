@@ -161,8 +161,9 @@ Container-aware routing
 Centralized service exposure
 
 Example architecture:
+<img width="2875" height="1501" alt="traefik-architecture" src="https://github.com/user-attachments/assets/bada0108-8eb5-4e3b-a57c-823f748451dc" />
 
-<img width="2189" height="1501" alt="docker" src="https://github.com/user-attachments/assets/c4a2ef41-846c-45cd-bb1b-0282d4af3b3b" />
+
 
 
 
