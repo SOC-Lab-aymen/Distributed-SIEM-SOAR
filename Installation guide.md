@@ -20,7 +20,7 @@ Important: Choose one Wazuh release and use the matching certificate tool, confi
 
 Wazuh officially supports a single-node Docker stack consisting of one Wazuh Manager, one Wazuh Indexer, and one Wazuh Dashboard container .
 
-1. Wazuh prerequisites
+# 1. Wazuh prerequisites
 
 Install Docker Engine and the Docker Compose plugin by following the official . The host should also have Git, curl, OpenSSL, and a modern web browser.
 
