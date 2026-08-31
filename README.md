@@ -181,7 +181,7 @@ Docker provides:
 - Easy infrastructure recovery
 
 # 📁 Repository Structure
-
+````
 distributed-siem-wazuh-traefik/
 │
 ├── README.md
@@ -230,11 +230,11 @@ distributed-siem-wazuh-traefik/
 │   ├── restore.sh
 │   └── healthcheck.sh
 │
-│
 └── examples/
     ├── failed-login.md
     ├── ssh-bruteforce.md
     └── malware-detection.md
+    
     
   
 
