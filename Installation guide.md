@@ -1,4 +1,4 @@
-Standalone installation guide
+# Standalone installation guide
 
 This document contains two independent Docker installations:
 
