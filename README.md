@@ -1,5 +1,4 @@
-<img width="3120" height="1200" alt="docker-container-architecture" src="https://github.com/user-attachments/assets/927bf693-99b4-4979-9ab2-5da310c6d78b" />
-<img width="3120" height="1200" alt="docker-container-architecture" src="https://github.com/user-attachments/assets/a50af988-c19e-4c7e-b280-bd4cd65890f7" />
+
 # Distributed-SIEM-Wazuh-using-Treafik
 
 A distributed Security Information and Event Management (SIEM) infrastructure built with Wazuh, Docker, and Traefik.
