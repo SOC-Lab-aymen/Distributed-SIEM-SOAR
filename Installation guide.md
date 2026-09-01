@@ -29,10 +29,11 @@ The Wazuh Docker requirements documentation recommends at least 2 CPU cores, 4 G
 On Linux, configure the kernel parameter required by the Wazuh Indexer:
 
 Plain Text
+````
 
 
 $ sudo sysctl -w vm.max_map_count=262144
-
+````
 
 
 To make the setting persistent, add this line to /etc/sysctl.conf:
