@@ -185,19 +185,16 @@ Docker provides:
 distributed-siem-wazuh-traefik/
 │
 ├── README.md
-├── LICENSE
-├── .gitignore
 │
 ├── docs/
 │   ├── architecture/
 │   │   ├── architecture.drawio
 │   │   ├── architecture.png
-│   │   └── network-topology.png
+│   │  
 │   │
 │   ├── deployment/
 │   │   ├── installation.md
 │   │   ├── configuration.md
-│   │   └── troubleshooting.md
 │   │
 │   └── screenshots/
 │
@@ -213,22 +210,7 @@ distributed-siem-wazuh-traefik/
 │   └── wazuh/
 │       ├── manager/
 │       ├── indexer/
-│       └── dashboard/
-│
-├── config/
-│   ├── wazuh/
-│   │   ├── rules/
-│   │   └── decoders/
-│   │
-│   └── traefik/
-│       ├── tls/
-│       └── middlewares/
-│
-├── scripts/
-│   ├── install.sh
-│   ├── backup.sh
-│   ├── restore.sh
-│   └── healthcheck.sh
+│       └── dashboard
 │
 └── examples/
     ├── failed-login.md
