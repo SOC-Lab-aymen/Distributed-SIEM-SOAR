@@ -165,27 +165,14 @@ The Wazuh Dashboard is normally available on the port defined by the official Co
 
 # 6. Wazuh ports
 ````
-Port
-Protocol
-Purpose
-1514
-TCP/UDP
-Wazuh agent event communication.
-1515
-TCP
-Wazuh agent enrollment.
-514
-UDP
-Optional syslog input.
-55000
-TCP
-Wazuh Manager API.
-9200
-TCP
-Wazuh Indexer API. Keep restricted to trusted administration networks.
-5601
-TCP
-Wazuh Dashboard web interface in the standalone Wazuh installation.
+| Port | Protocol| Purpose                                                                |
+| ---- | --------| -----------------------------------------------------------------------|
+| 1514 | TCP/UDP | Wazuh agent event communication.                                       |
+| 1515 | TCP     | Wazuh agent enrollment.                                                |
+| 514  | UDP     | Optional syslog input.                                                 |
+| 55000| TCP     | Wazuh Manager API.                                                     |
+| 9200 | TCP     | Wazuh Indexer API. Keep restricted to trusted administration networks. |
+| 5601 | TCP     | Wazuh Dashboard web interface in the standalone Wazuh installation.    |
 ````
 
 
