@@ -9,7 +9,7 @@ This document contains two independent Docker installations:
 There is no integration between the two installations in this guide. They use separate directories, separate Compose projects, and separate Docker resources.
 
 
-# Important: Choose one Wazuh release and use the matching certificate tool, configuration template, and container image tags. Do not mix files from different Wazuh releases.
+Important: Choose one Wazuh release and use the matching certificate tool, configuration template, and container image tags. Do not mix files from different Wazuh releases.
 
 
 
