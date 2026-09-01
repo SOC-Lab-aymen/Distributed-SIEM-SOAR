@@ -1,0 +1,59 @@
+<!--
+SIG Phase 4: Docker security. Rule 100605 now monitors host-level container port exposure.
+-->
+<group name="sig,phase_04,docker,template,">
+
+<rule id="100600" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)("Action"\s*:\s*"create"|docker.*container.*create)</regex>
+    <description>SIG TEMPLATE: Docker container created.</description>
+    <mitre><id>T1610</id></mitre>
+    <group>sig_docker,container_create,</group>
+  </rule>
+
+<rule id="100601" level="10">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)("Privileged"\s*:\s*true|privileged[[:space:]]+mode)</regex>
+    <description>SIG TEMPLATE: Privileged Docker container configuration observed.</description>
+    <mitre><id>T1611</id></mitre>
+    <group>sig_docker,privileged_container,</group>
+  </rule>
+
+<rule id="100602" level="4">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)("Action"\s*:\s*"(start|stop|die|destroy)"|docker.*container.*(start|stop|delete))</regex>
+    <description>SIG TEMPLATE: Docker container lifecycle event observed.</description>
+    <group>sig_docker,container_lifecycle,</group>
+  </rule>
+
+<rule id="100603" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(exec_create|exec_start|docker[[:space:]]+exec)</regex>
+    <description>SIG TEMPLATE: Command executed inside a Docker container.</description>
+    <mitre><id>T1609</id></mitre>
+    <group>sig_docker,container_exec,execution,</group>
+  </rule>
+
+<rule id="100604" level="6">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)("Action"\s*:\s*"pull"|image.*pull)</regex>
+    <description>SIG TEMPLATE: Docker image pulled; validate registry against SIG allow-list.</description>
+    <group>sig_docker,image_pull,</group>
+  </rule>
+
+  <rule id="100605" level="9">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(published port|port mapping|host port|listening port).*(container|docker)|container.*(published port|port mapping)</regex>
+    <description>SIG TEMPLATE: Host-level port exposure by a container; compare with approved exposure inventory.</description>
+    <mitre><id>T1610</id></mitre>
+    <group>sig_docker,host_port_exposure,network_exposure,</group>
+  </rule>
+
+<rule id="100606" level="8">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(critical.*vulnerabilit|high.*vulnerabilit|unsupported image)</regex>
+    <description>SIG TEMPLATE: Container image scanner reported a high-risk image finding.</description>
+    <group>sig_docker,image_vulnerability,</group>
+  </rule>
+
+</group>

@@ -1,0 +1,73 @@
+<!--
+SIG Phase 6: Host vulnerability, configuration, resilience, and deferred SOAR candidates. Cloud IDs 100808-100811 removed.
+-->
+<group name="sig,phase_06,operations,soar,template,">
+
+<rule id="100800" level="9">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(critical.*cve|critical.*vulnerability)</regex>
+    <description>SIG TEMPLATE: Critical vulnerability finding reported by vulnerability telemetry.</description>
+    <group>sig_vulnerability,critical_cve,</group>
+  </rule>
+
+<rule id="100801" level="8">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(sca.*failed|security configuration.*failed|policy.*failed)</regex>
+    <description>SIG TEMPLATE: Critical security configuration assessment failure.</description>
+    <group>sig_sca,configuration_assessment,</group>
+  </rule>
+
+<rule id="100802" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(new listening port|unexpected open port|service exposure)</regex>
+    <description>SIG TEMPLATE: Unexpected listening service or exposed port detected.</description>
+    <mitre><id>T1046</id></mitre>
+    <group>sig_operations,network_exposure,</group>
+  </rule>
+
+<rule id="100804" level="7">
+    <if_sid>1007</if_sid>
+    <description>SIG: Low disk space or file-system-full event detected.</description>
+    <group>sig_operations,availability,low_diskspace,</group>
+  </rule>
+
+<rule id="100805" level="8">
+    <if_sid>5108</if_sid>
+    <description>SIG: Out-of-memory event; investigate for availability impact or resource abuse.</description>
+    <group>sig_operations,availability,resource_exhaustion,</group>
+  </rule>
+
+<rule id="100806" level="7">
+    <decoded_as>systemd</decoded_as>
+    <regex type="pcre2">(?i)(Stopped|Failed|Restarting)</regex>
+    <description>SIG TEMPLATE: Systemd service stopped, failed, or restarted.</description>
+    <group>sig_operations,service_availability,</group>
+  </rule>
+
+<rule id="100807" level="6">
+    <if_sid>60132</if_sid>
+    <description>SIG: Windows system clock changed.</description>
+    <mitre><id>T1070.006</id></mitre>
+    <group>sig_windows,time_changed,</group>
+  </rule>
+
+<rule id="100900" level="12">
+    <if_level>10</if_level>
+    <description>SIG: Critical alert selected as a candidate for SOAR case creation and triage.</description>
+    <group>sig_soar,candidate,critical,</group>
+  </rule>
+
+<rule id="100901" level="10">
+    <if_level>8</if_level>
+    <description>SIG: High-severity alert selected for human approval before response.</description>
+    <group>sig_soar,human_approval,</group>
+  </rule>
+
+<rule id="100902" level="6">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(ioc|indicator|misp|cortex.*enrichment)</regex>
+    <description>SIG TEMPLATE: Threat-intelligence enrichment event or observable received.</description>
+    <group>sig_soar,threat_intelligence,enrichment,</group>
+  </rule>
+
+</group>

@@ -1,0 +1,109 @@
+<!--
+SIG Phase 3: Web, Traefik, and PostgreSQL detections. PostgreSQL administration coverage added.
+-->
+<group name="sig,phase_03,web,postgresql,template,">
+
+<rule id="100500" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(union[[:space:]]+select|or[[:space:]]+1=1|information_schema|sleep\(|benchmark\(|drop[[:space:]]+table|--[[:space:]]|/\*.*\*/)</regex>
+    <description>SIG TEMPLATE: Possible SQL injection pattern in a decoded web request.</description>
+    <mitre><id>T1190</id></mitre>
+    <group>sig_web,sqli,web_attack,</group>
+  </rule>
+
+  <rule id="100501" level="10">
+    <if_matched_sid>100500</if_matched_sid>
+    <!-- Confirm same_srcip or a same_field correlation key with real samples before production use. -->
+    <description>SIG TEMPLATE: SQL injection confirmed only after correlation with PostgreSQL error telemetry from the same source.</description>
+    <mitre><id>T1190</id></mitre>
+    <group>sig_web,sqli,correlation_required,</group>
+  </rule>
+
+<rule id="100502" level="5">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)(syntax error at or near|unterminated quoted string|invalid input syntax|ERROR:)</regex>
+    <description>SIG TEMPLATE: PostgreSQL syntax or query error observed.</description>
+    <group>sig_database,postgresql,error,</group>
+  </rule>
+
+<rule id="100503" level="7" frequency="5" timeframe="120" ignore="60">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)(password authentication failed|authentication failed|no pg_hba.conf entry)</regex>
+    <description>SIG TEMPLATE: Repeated PostgreSQL authentication failures.</description>
+    <mitre><id>T1110</id></mitre>
+    <group>sig_database,postgresql,authentication_failures,</group>
+  </rule>
+
+<rule id="100504" level="9">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)\b(drop[[:space:]]+(table|database)|truncate[[:space:]]+table|delete[[:space:]]+from)\b</regex>
+    <description>SIG TEMPLATE: Potentially destructive PostgreSQL statement observed.</description>
+    <mitre><id>T1485</id></mitre>
+    <group>sig_database,postgresql,destructive_query,</group>
+  </rule>
+
+<rule id="100505" level="8" frequency="8" timeframe="120" ignore="60">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(login failed|invalid credentials|authentication failed)</regex>
+    <description>SIG TEMPLATE: Web application brute-force authentication activity.</description>
+    <mitre><id>T1110</id></mitre>
+    <group>sig_web,authentication_failures,bruteforce,</group>
+  </rule>
+
+<rule id="100506" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(\.\./|%2e%2e%2f|%252e%252e%252f)</regex>
+    <description>SIG TEMPLATE: Directory traversal request pattern observed.</description>
+    <mitre><id>T1190</id></mitre>
+    <group>sig_web,directory_traversal,web_attack,</group>
+  </rule>
+
+<rule id="100507" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(%3cscript|&lt;script|javascript:|onerror=|onload=)</regex>
+    <description>SIG TEMPLATE: Cross-site scripting request pattern observed.</description>
+    <mitre><id>T1059.007</id></mitre>
+    <group>sig_web,xss,web_attack,</group>
+  </rule>
+
+  <rule id="100508" level="9">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)\b(create role|alter role|grant .* to|revoke .* from)\b</regex>
+    <description>SIG: PostgreSQL role or login privilege changed.</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_database,postgresql,account_changed,privilege_escalation,</group>
+  </rule>
+
+  <rule id="100509" level="8">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)\b(grant|revoke)\b.*\b(database|schema|table|sequence)\b</regex>
+    <description>SIG: PostgreSQL database, schema, or object privilege changed.</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_database,postgresql,authorization_change,</group>
+  </rule>
+
+  <rule id="100510" level="9">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)\b(create|alter|drop)\s+extension\b|trusted procedural language</regex>
+    <description>SIG: PostgreSQL extension or trusted procedural language changed.</description>
+    <mitre><id>T1505.003</id></mitre>
+    <group>sig_database,postgresql,configuration_change,</group>
+  </rule>
+
+  <rule id="100511" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^|/)(pg_hba\.conf|postgresql\.conf)$</field>
+    <description>SIG: PostgreSQL administrative configuration modified.</description>
+    <mitre><id>T1562.001</id></mitre>
+    <group>sig_database,postgresql,configuration_change,</group>
+  </rule>
+
+  <rule id="100512" level="9">
+    <decoded_as>postgresql</decoded_as>
+    <regex type="pcre2">(?i)(create|alter|replace)\s+(function|procedure)|security definer|owner to</regex>
+    <description>SIG: PostgreSQL privileged function or ownership changed.</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_database,postgresql,privilege_escalation,</group>
+  </rule>
+
+</group>

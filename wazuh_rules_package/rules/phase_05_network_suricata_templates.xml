@@ -1,0 +1,47 @@
+<!--
+  SIG Phase 5 (DEFERRED): Network and Suricata detection templates.
+  STATUS: POSTPONED. Do not deploy in the current simple Wazuh lab. Deploy only after a Suricata sensor is approved,
+  eve.json is collected, and the exact decoder/fields are confirmed in Ruleset Test.
+-->
+<group name="sig,phase_05,network,suricata,template,">
+
+  <rule id="100700" level="10">
+    <decoded_as>json</decoded_as>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^1$</field>
+    <description>SIG TEMPLATE: Suricata high-severity network IDS alert.</description>
+    <group>sig_network,suricata,ids_high,</group>
+  </rule>
+
+  <rule id="100701" level="6">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(scan|nmap|portscan|port scan)</regex>
+    <description>SIG TEMPLATE: Network scan indicated by Suricata alert telemetry.</description>
+    <mitre><id>T1046</id></mitre>
+    <group>sig_network,suricata,network_scan,</group>
+  </rule>
+
+  <rule id="100702" level="9">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(trojan|malware|command and control|c2|botnet)</regex>
+    <description>SIG TEMPLATE: Possible command-and-control or malware network alert.</description>
+    <mitre><id>T1071</id></mitre>
+    <group>sig_network,suricata,c2,malware,</group>
+  </rule>
+
+  <rule id="100703" level="9">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(ioc match|threat intel|known malicious|blacklist match)</regex>
+    <description>SIG TEMPLATE: Threat-intelligence indicator match observed.</description>
+    <group>sig_network,threat_intelligence,ioc_match,</group>
+  </rule>
+
+  <rule id="100704" level="7">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(dns tunneling|dns_tunnel|long dns query|suspicious dns)</regex>
+    <description>SIG TEMPLATE: Potential DNS tunneling or anomalous DNS activity.</description>
+    <mitre><id>T1071.004</id></mitre>
+    <group>sig_network,dns_tunneling,</group>
+  </rule>
+
+</group>

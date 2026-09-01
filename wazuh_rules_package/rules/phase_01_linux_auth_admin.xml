@@ -1,0 +1,57 @@
+<!--
+SIG Phase 1: Linux/SSH authentication and administration. Rule 100203 removed per catalogue observation.
+-->
+<group name="sig,phase_01,linux,authentication,administration,">
+
+<rule id="100200" level="7">
+    <if_sid>5710</if_sid>
+    <description>SIG: SSH login attempt using a non-existent user.</description>
+    <mitre><id>T1110</id></mitre>
+    <group>sig_ssh,authentication_failed,</group>
+  </rule>
+
+<rule id="100201" level="10" frequency="5" timeframe="60" ignore="60">
+    <if_matched_sid>5710</if_matched_sid>
+    <same_source_ip />
+    <description>SIG: SSH brute-force attempt - five invalid users from one source IP in 60 seconds.</description>
+    <mitre><id>T1110</id></mitre>
+    <group>sig_ssh,authentication_failures,bruteforce,</group>
+  </rule>
+
+<rule id="100202" level="8">
+    <if_sid>5715</if_sid>
+    <regex>Accepted .* for root</regex>
+    <description>SIG: Successful SSH login to the root account.</description>
+    <mitre><id>T1078</id><id>T1021.004</id></mitre>
+    <group>sig_ssh,root_login,authentication_success,</group>
+  </rule>
+
+<rule id="100204" level="7">
+    <if_sid>5401</if_sid>
+    <description>SIG: Failed sudo authentication attempt.</description>
+    <mitre><id>T1078</id></mitre>
+    <group>sig_linux,privilege_escalation,authentication_failed,</group>
+  </rule>
+
+<rule id="100205" level="8">
+    <if_sid>5902</if_sid>
+    <description>SIG: New Linux local user created.</description>
+    <mitre><id>T1136</id></mitre>
+    <group>sig_linux,account_created,</group>
+  </rule>
+
+<rule id="100206" level="7">
+    <if_sid>5903</if_sid>
+    <description>SIG: Linux local user or group deleted.</description>
+    <mitre><id>T1531</id></mitre>
+    <group>sig_linux,account_deleted,</group>
+  </rule>
+
+<rule id="100207" level="8">
+    <if_sid>2833</if_sid>
+    <description>SIG: Root crontab modified - possible persistence.</description>
+    <mitre><id>T1053.003</id></mitre>
+    <group>sig_linux,persistence,scheduled_task,</group>
+  </rule>
+
+</group>

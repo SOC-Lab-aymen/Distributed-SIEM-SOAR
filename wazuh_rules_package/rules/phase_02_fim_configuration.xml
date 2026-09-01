@@ -1,0 +1,114 @@
+<!--
+SIG Phase 2: Linux/Windows FIM and sensitive service configuration. GitLab moved to the later CI/CD phase.
+-->
+<group name="syscheck,sig,phase_02,fim,configuration,">
+
+<rule id="100400" level="10">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/etc/(sudoers|ssh/sshd_config|passwd|shadow)$</field>
+    <description>SIG: Critical Linux security configuration file modified: $(file).</description>
+    <mitre><id>T1562.001</id></mitre>
+    <group>sig_fim,critical_file,</group>
+  </rule>
+
+<rule id="100401" level="10">
+    <if_sid>554</if_sid>
+    <field name="file" type="pcre2">^/var/www/.*\.(php|phtml|jsp|aspx)$</field>
+    <description>SIG: Executable web file added to monitored web root: $(file).</description>
+    <mitre><id>T1505.003</id></mitre>
+    <group>sig_fim,web_shell,web_root,</group>
+  </rule>
+
+<rule id="100402" level="8">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/var/www/.*\.(env|yaml|yml|json|php|conf)$</field>
+    <description>SIG: Web application configuration or source file modified: $(file).</description>
+    <group>sig_fim,web_application,</group>
+  </rule>
+
+<rule id="100403" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^/etc/ssh/|/\.ssh/(authorized_keys|config)$)</field>
+    <description>SIG: SSH configuration or authorized key modified: $(file).</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_fim,ssh,credential_access,</group>
+  </rule>
+
+<rule id="100404" level="8">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/etc/(cron\.|cron/|systemd/system/)|^/var/spool/cron/</field>
+    <description>SIG: Cron or systemd persistence location modified: $(file).</description>
+    <mitre><id>T1053</id><id>T1543.002</id></mitre>
+    <group>sig_fim,persistence,</group>
+  </rule>
+
+<rule id="100405" level="7">
+    <if_sid>550</if_sid>
+    <field name="changed_fields">^permission$|^owner$|^group$</field>
+    <description>SIG: Sensitive monitored file permissions or ownership changed: $(file).</description>
+    <mitre><id>T1222</id></mitre>
+    <group>sig_fim,permission_change,</group>
+  </rule>
+
+<rule id="100406" level="10">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(?i)^C:\\SIG-Monitored\\Critical\\</field>
+    <description>SIG: Critical Windows monitored file modified: $(file).</description>
+    <group>sig_fim,windows,critical_file,</group>
+  </rule>
+
+<rule id="100407" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(?i)\\(currentversion\\run|runonce)</field>
+    <description>SIG: Windows autorun registry entry modified.</description>
+    <mitre><id>T1547.001</id></mitre>
+    <group>sig_fim,windows,persistence,registry,</group>
+  </rule>
+
+<rule id="100411" level="8">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/srv/(backups|artifacts)/</field>
+    <description>SIG: Backup or CI artifact file modified: $(file).</description>
+    <group>sig_fim,backup,artifact,</group>
+  </rule>
+
+  <rule id="100412" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^|/)(pg_hba\.conf|postgresql\.conf)$</field>
+    <description>SIG: PostgreSQL pg_hba.conf or postgresql.conf modified: $(file).</description>
+    <mitre><id>T1562.001</id></mitre>
+    <group>sig_fim,postgresql,configuration_change,</group>
+  </rule>
+
+  <rule id="100413" level="8">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^|/)traefik[^/]*/.*\.(yml|yaml|toml|json)$</field>
+    <description>SIG: Traefik dynamic configuration modified: $(file).</description>
+    <group>sig_fim,traefik,configuration_change,</group>
+  </rule>
+
+  <rule id="100414" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^|/)(docker-compose\.ya?ml|\.env)$</field>
+    <description>SIG: Docker deployment configuration or environment file modified: $(file).</description>
+    <mitre><id>T1610</id></mitre>
+    <group>sig_fim,docker,configuration_change,</group>
+  </rule>
+
+  <rule id="100415" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">^/etc/(passwd|shadow|sudoers)$</field>
+    <description>SIG: Linux identity or privilege-control file modified: $(file).</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_fim,identity,privilege_escalation,</group>
+  </rule>
+
+  <rule id="100416" level="9">
+    <if_sid>550</if_sid>
+    <field name="file" type="pcre2">(^/etc/ssh/ssh_host_.*_key$|/authorized_keys$)</field>
+    <description>SIG: SSH host key or authorized_keys file modified: $(file).</description>
+    <mitre><id>T1098.004</id></mitre>
+    <group>sig_fim,ssh,persistence,</group>
+  </rule>
+
+</group>

@@ -1,0 +1,14 @@
+<!--
+SIG Phase 7 (LATER): GitLab and CI/CD integrity. Enable only after GitLab telemetry is onboarded.
+-->
+<group name="sig,phase_07,gitlab,cicd,template,">
+
+  <rule id="100417" level="9">
+    <decoded_as>json</decoded_as>
+    <regex type="pcre2">(?i)(protected branch|project member|repository permission).*(changed|added|removed)</regex>
+    <description>SIG: GitLab protected-branch, membership, or repository permission changed.</description>
+    <mitre><id>T1098</id></mitre>
+    <group>sig_gitlab,cicd,authorization_change,</group>
+  </rule>
+
+</group>
