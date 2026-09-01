@@ -337,7 +337,7 @@ $ docker compose down
 
 
 References
-
+```
 [1] Wazuh Docker deployment
 [2] Changing the default password of Wazuh users
 [3] Official Wazuh Docker repository
@@ -345,3 +345,4 @@ References
 [5] Wazuh Docker requirements
 [6] Traefik Docker provider
 [7] Traefik TLS certificates
+```
