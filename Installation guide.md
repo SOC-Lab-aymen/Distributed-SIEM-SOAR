@@ -1,12 +1,12 @@
-# Standalone installation guide
+Standalone installation guide
 
 This document contains two independent Docker installations:
 
+1.
+Wazuh standalone installation with the Wazuh Manager, Wazuh Indexer, and Wazuh Dashboard.
 
-1.Wazuh standalone installation with the Wazuh Manager, Wazuh Indexer, and Wazuh Dashboard.
-
-
-2.Traefik standalone installation as an independent reverse-proxy project.
+2.
+Traefik standalone installation as an independent reverse-proxy project.
 
 There is no integration between the two installations in this guide. They use separate directories, separate Compose projects, and separate Docker resources.
 
@@ -16,11 +16,11 @@ Important: Choose one Wazuh release and use the matching certificate tool, confi
 
 
 
-# Part 1 — Install Wazuh on Docker
+Part 1 — Install Wazuh on Docker
 
 Wazuh officially supports a single-node Docker stack consisting of one Wazuh Manager, one Wazuh Indexer, and one Wazuh Dashboard container .
 
-# 1. Wazuh prerequisites
+1. Wazuh prerequisites
 
 Install Docker Engine and the Docker Compose plugin by following the official . The host should also have Git, curl, OpenSSL, and a modern web browser.
 
@@ -28,10 +28,10 @@ The Wazuh Docker requirements documentation recommends at least 2 CPU cores, 4 G
 
 On Linux, configure the kernel parameter required by the Wazuh Indexer:
 
-.Bash
+Plain Text
 
 
-.sudo sysctl -w vm.max_map_count=262144
+$ sudo sysctl -w vm.max_map_count=262144
 
 
 
@@ -46,23 +46,23 @@ vm.max_map_count=262144
 
 Then reload the configuration:
 
-Bash
+Plain Text
 
 
-sudo sysctl -p
+$ sudo sysctl -p
 
 
 
-# 2. Download the official Wazuh Docker repository
+2. Download the official Wazuh Docker repository
 
 Create a dedicated directory and clone the official Wazuh Docker repository:
 
-Bash
+Plain Text
 
 
-mkdir -p ~/wazuh-docker
-cd ~/wazuh-docker
-git clone https://github.com/wazuh/wazuh-docker.git .
+$ mkdir -p ~/wazuh-docker
+$ cd ~/wazuh-docker
+$ git clone https://github.com/wazuh/wazuh-docker.git .
 
 
 
@@ -70,24 +70,24 @@ Select the Wazuh release directory that matches the version you intend to deploy
 
 For a single-node deployment, the relevant Compose definition is the official single-node stack. If you are using this project’s Compose file instead, run it as a separate Compose project and do not combine it with the standalone Traefik project described later in this document.
 
-# 3. Generate Wazuh certificates
+3. Generate Wazuh certificates
 
 Wazuh uses certificates for secure communication between the Manager, Indexer, and Dashboard. From the directory containing the single-node Compose file, download the certificate tool and matching configuration template.
 
 The following example uses Wazuh 5.1.0. Replace the version in both URLs when using another release:
 
-Bash
+Plain Text
 
 
-cd ~/wazuh-docker/single-node
+$ cd ~/wazuh-docker/single-node
 
-curl -fL -o wazuh-certs-tool.sh \\
-  https://packages.wazuh.com/5.0/wazuh-certs-tool-5.1.0-1.sh
+$ curl -fL -o wazuh-certs-tool.sh \
+    https://packages.wazuh.com/5.0/wazuh-certs-tool-5.1.0-1.sh
 
-curl -fL -o config.yml \\
-  https://packages.wazuh.com/5.0/config-5.1.0-1.yml
+$ curl -fL -o config.yml \
+    https://packages.wazuh.com/5.0/config-5.1.0-1.yml
 
-chmod 700 wazuh-certs-tool.sh
+$ chmod 700 wazuh-certs-tool.sh
 
 
 
@@ -116,33 +116,33 @@ nodes:
 
 Generate the certificates using the certificate procedure documented by Wazuh for the selected release . In the official Wazuh Docker repository, the deployment helper can be used as follows:
 
-Bash
+Plain Text
 
 
-sudo bash ../tools/utils/deployment/certificates-conf.sh --cert --copy --priv
+$ sudo bash ../tools/utils/deployment/certificates-conf.sh --cert --copy --priv
 
 
 
 The generated certificates must be present at the paths expected by the selected Wazuh Compose file. Do not commit config.yml, the certificate tool, or generated private keys to Git.
 
-# 4. Start the Wazuh single-node stack
+4. Start the Wazuh single-node stack
 
 From the directory containing the official single-node Compose file, start Wazuh:
 
-Bash
+Plain Text
 
 
-cd ~/wazuh-docker/single-node
-docker compose up -d
+$ cd ~/wazuh-docker/single-node
+$ docker compose up -d
 
 
 
 Check the service status:
 
-Bash
+Plain Text
 
 
-docker compose ps
+$ docker compose ps
 
 
 
@@ -159,22 +159,22 @@ wazuh.dashboard
 
 The first startup may take several minutes while the Indexer initializes its data directories and security configuration .
 
-# 5. Verify Wazuh services
+5. Verify Wazuh services
 
 Inspect the logs for each Wazuh component:
 
-Bash
+Plain Text
 
 
-docker compose logs --tail=100 wazuh.indexer
-docker compose logs --tail=100 wazuh.manager
-docker compose logs --tail=100 wazuh.dashboard
+$ docker compose logs --tail=100 wazuh.indexer
+$ docker compose logs --tail=100 wazuh.manager
+$ docker compose logs --tail=100 wazuh.dashboard
 
 
 
 The Wazuh Dashboard is normally available on the port defined by the official Compose file. Open that address in a browser and sign in using the credentials defined by the official Wazuh deployment. Change default credentials immediately after the first login .
 
-# 6. Wazuh ports
+6. Wazuh ports
 
 Port
 Protocol
@@ -203,14 +203,14 @@ Wazuh Dashboard web interface in the standalone Wazuh installation.
 
 Use host firewall rules to restrict access. The Indexer API should not be exposed to the public internet.
 
-# 7. Stop the standalone Wazuh installation
+7. Stop the standalone Wazuh installation
 
 Stop the Wazuh containers while keeping their named volumes:
 
-Bash
+Plain Text
 
 
-docker compose down
+$ docker compose down
 
 
 
@@ -219,47 +219,47 @@ Avoid docker compose down -v unless you intentionally want to delete the persist
 
 
 
-# Part 2 — Install Traefik on Docker
+Part 2 — Install Traefik on Docker
 
 This section installs Traefik as a standalone Docker project. It does not connect Traefik to Wazuh and does not contain Wazuh routing labels.
 
 Traefik’s Docker provider watches Docker resources and can discover containers through Docker labels. The provider can be enabled with providers.docker=true, while exposedByDefault=false prevents containers from being routed unless explicitly enabled .
 
-# 1. Traefik prerequisites
+1. Traefik prerequisites
 
 Install Docker Engine and Docker Compose using the official Docker instructions . Also install curl and OpenSSL if you want to test the standalone installation with a local TLS certificate.
 
 Ensure ports 80 and 443 are available on the host. If another application is already using either port, stop it or select different host ports in the Traefik Compose file.
 
-# 2. Create an isolated Traefik project
+2. Create an isolated Traefik project
 
 Create a separate directory that is independent from the Wazuh directory:
 
-Bash
+Plain Text
 
 
-mkdir -p ~/traefik-standalone/{dynamic,certs}
-cd ~/traefik-standalone
+$ mkdir -p ~/traefik-standalone/{dynamic,certs}
+$ cd ~/traefik-standalone
 
 
 
 Create a local certificate for testing:
 
-Bash
+Plain Text
 
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \\
-  -keyout certs/local.key \\
-  -out certs/local.crt \\
-  -subj "/CN=traefik.localhost"
+$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout certs/local.key \
+    -out certs/local.crt \
+    -subj "/CN=traefik.localhost"
 
-chmod 600 certs/local.key
+$ chmod 600 certs/local.key
 
 
 
 For production, use a certificate issued for a real DNS name by a trusted certificate authority. Traefik supports user-defined certificates in dynamic configuration .
 
-# 3. Create Traefik dynamic TLS configuration
+3. Create Traefik dynamic TLS configuration
 
 Create dynamic/tls.yml:
 
@@ -275,7 +275,7 @@ tls:
 
 This is a standalone Traefik TLS configuration. It does not reference Wazuh or any other application.
 
-# 4. Create the standalone Traefik Compose file
+4. Create the standalone Traefik Compose file
 
 Create docker-compose.yml in ~/traefik-standalone:
 
@@ -313,44 +313,44 @@ This Compose file installs Traefik only. It has no Wazuh service, no Wazuh netwo
 
 The read-only Docker socket is used for Docker provider discovery. Because Docker API access is powerful, protect the host and consider a restricted Docker socket proxy for production deployments .
 
-# 5. Start Traefik
+5. Start Traefik
 
 Start the standalone Traefik container:
 
-Bash
+Plain Text
 
 
-cd ~/traefik-standalone
-docker compose up -d
+$ cd ~/traefik-standalone
+$ docker compose up -d
 
 
 
 Check the container status:
 
-Bash
+Plain Text
 
 
-docker compose ps
+$ docker compose ps
 
 
 
 Inspect the logs:
 
-Bash
+Plain Text
 
 
-docker compose logs --tail=100 traefik
+$ docker compose logs --tail=100 traefik
 
 
 
-# 6. Verify the standalone Traefik container
+6. Verify the standalone Traefik container
 
 Confirm that Traefik is listening on the published ports:
 
-Bash
+Plain Text
 
 
-curl -kI https://localhost
+$ curl -kI https://localhost
 
 
 
@@ -362,11 +362,11 @@ The Traefik dashboard is disabled as an externally reachable application in this
 
 Stop the Traefik container without deleting the project files:
 
-Bash
+Plain Text
 
 
-cd ~/traefik-standalone
-docker compose down
+$ cd ~/traefik-standalone
+$ docker compose down
 
 
 
