@@ -1,10 +1,9 @@
+# Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)
 services:
   wazuh.manager:
     image: wazuh/wazuh-manager:4.14.7
     hostname: wazuh.manager
     restart: always
-    networks:
-      - wazuh-net
     ulimits:
       memlock:
         soft: -1
@@ -48,8 +47,6 @@ services:
     image: wazuh/wazuh-indexer:4.14.7
     hostname: wazuh.indexer
     restart: always
-    networks:
-      - wazuh-net
     ports:
       - "9200:9200"
     environment:
@@ -75,9 +72,13 @@ services:
     image: wazuh/wazuh-dashboard:4.14.7
     hostname: wazuh.dashboard
     restart: always
-    networks:
-      - wazuh-net
-    # REMOVED: ports mapping. Dashboard is now reachable ONLY through Traefik.
+    ports:
+      - 443:5601
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wazuh.rule=Host(`wazuh.localhost`)"
+      - "traefik.http.routers.wazuh.entrypoints=web"
+      - "traefik.http.services.wazuh.loadbalancer.server.port=5601"
     environment:
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=SecretPassword
@@ -99,14 +100,6 @@ services:
     links:
       - wazuh.indexer:wazuh.indexer
       - wazuh.manager:wazuh.manager
-    labels:
-      # Enable Traefik for this container only
-      - "traefik.enable=true"
-      # TCP router: Traefik receives TLS on 443 and passes it through untouched to the dashboard
-      - "traefik.tcp.routers.wazuh-dashboard.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.wazuh-dashboard.entrypoints=websecure"
-      - "traefik.tcp.routers.wazuh-dashboard.tls.passthrough=true"
-      - "traefik.tcp.services.wazuh-dashboard.loadbalancer.server.port=5601"
 
   traefik:
     image: traefik:v3.7
@@ -115,19 +108,13 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
-      - "443:443"
       - "8080:8080"
-    networks:
-      - wazuh-net
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-
-networks:
-  wazuh-net:
-    driver: bridge
+    networks:
+      - default
 
 volumes:
   wazuh_api_configuration:
