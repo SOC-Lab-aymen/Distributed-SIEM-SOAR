@@ -1,236 +1,210 @@
-# Distributed SIEM & SOAR Security Platform
+# 🛡️ Distributed SIEM & SOAR Security Platform
 
-## 📌 Overview
+<p align="center">
+  <strong>Centralized Security Monitoring • Automated Incident Response • SOAR</strong>
+</p>
 
-This project consists of the design and deployment of a **distributed and centralized Security Information and Event Management (SIEM) platform**, combined with **Security Orchestration, Automation and Response (SOAR)** techniques.
+<p align="center">
+  A containerized cybersecurity platform combining SIEM, SOAR, incident management, IOC enrichment and real-time notifications.
+</p>
 
-The objective is to centralize security event collection, detect and analyze suspicious activities, automate incident response, and notify security administrators through communication channels such as **Discord and Email**.
+<p align="center">
 
-The platform integrates:
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![Wazuh](https://img.shields.io/badge/Wazuh-SIEM-4C9AFF?style=for-the-badge)
+![Traefik](https://img.shields.io/badge/Traefik-Reverse%20Proxy-24A1C1?style=for-the-badge\&logo=traefik\&logoColor=white)
+![Shuffle](https://img.shields.io/badge/Shuffle-SOAR-6C5CE7?style=for-the-badge)
+![TheHive](https://img.shields.io/badge/TheHive-Incident%20Response-F5A623?style=for-the-badge)
+![Cortex](https://img.shields.io/badge/Cortex-Analyzer-E74C3C?style=for-the-badge)
 
-* **Wazuh** — SIEM, HIDS and security monitoring
-* **Traefik** — Reverse proxy and secure entry point
-* **Shuffle** — SOAR automation and orchestration
-* **TheHive** — Security incident and case management
-* **Cortex** — Automated analysis and observables enrichment
-* **Discord / Email** — Security alert notification
-
-The entire environment is containerized using **Docker and Docker Compose**.
-
----
-
-## 🎯 Project Objectives
-
-The main objectives of this project are:
-
-* Centralize security logs and events from monitored systems.
-* Detect suspicious and malicious activities.
-* Correlate security events using Wazuh detection rules.
-* Automate incident response using SOAR techniques.
-* Reduce manual intervention during incident investigation.
-* Create and manage security incidents automatically.
-* Enrich security observables through Cortex analyzers.
-* Provide security analysts with a centralized incident-management platform.
-* Send real-time notifications through Discord and Email.
-* Provide a scalable architecture that can be extended with additional endpoints and security tools.
+</p>
 
 ---
 
-## 🏗️ Architecture
+## 🔎 Overview
 
-The platform follows a **distributed collection with centralized security management** architecture.
+This project implements a **distributed and centralized SIEM/SOAR platform** designed to monitor infrastructure, detect security threats, automate incident-response workflows, enrich indicators of compromise, and notify security teams in real time.
+
+The platform combines several open-source cybersecurity technologies into a unified security workflow:
 
 ```text
-                    ┌─────────────────────────┐
-                    │       Monitored         │
-                    │        Systems          │
-                    │                         │
-                    │  Linux/Windows/servers  │
-                    └────────────┬────────────┘
-                                 │
-                                 │ Security Events
-                                 ▼
-                    ┌─────────────────────────┐
-                    │         WAZUH           │
-                    │                         │
-                    │  • Agents               │
-                    │  • Log Collection       │
-                    │  • Detection Rules      │
-                    │  • Correlation          │
-                    │  • Alerts               │
-                    └────────────┬────────────┘
-                                 │
-                                 │ Webhook / API
-                                 ▼
-                    ┌─────────────────────────┐
-                    │        TRAEFIK          │
-                    │                         │
-                    │  Reverse Proxy          │
-                    │  Entry Point            │
-                    │  Routing                │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │        SHUFFLE          │
-                    │          SOAR           │
-                    │                         │
-                    │  • Workflows            │
-                    │  • Automation           │
-                    │  • Orchestration        │
-                    │  • API Integrations      │
-                    └───────┬─────────┬────────┘
-                            │         │
-                 ┌──────────┘         └──────────┐
-                 ▼                               ▼
-       ┌───────────────────┐           ┌───────────────────┐
-       │      THEHIVE      │          │      CORTEX      │
-       │                   │           │                   │
-       │ Incident Cases    │           │ Observable        │
-       │ Investigation     │◄──────────│ Analysis          │
-       │ Case Management   │           │ Enrichment        │
-       └───────────────────┘           └───────────────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │      NOTIFICATION   │
-                 │                     │
-                 │  Discord / Email    │
-                 └─────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                    SECURITY OPERATIONS                       │
+└──────────────────────────────┬───────────────────────────────┘
+                               │
+                               ▼
+                     ┌─────────────────┐
+                     │     WAZUH       │
+                     │      SIEM       │
+                     └────────┬────────┘
+                              │
+                         Security Alert
+                              │
+                              ▼
+                     ┌─────────────────┐
+                     │     TRAEFIK     │
+                     │ Reverse Proxy   │
+                     └────────┬────────┘
+                              │
+                              ▼
+                     ┌─────────────────┐
+                     │     SHUFFLE     │
+                     │      SOAR       │
+                     └───────┬─┬───────┘
+                             │ │
+              ┌──────────────┘ └──────────────┐
+              ▼                               ▼
+       ┌──────────────┐                ┌──────────────┐
+       │    CORTEX    │                │   THEHIVE    │
+       │ IOC Analysis │                │ Case Mgmt.   │
+       └──────┬───────┘                └──────┬───────┘
+              │                               │
+              └──────────────┬────────────────┘
+                             ▼
+                  ┌─────────────────────┐
+                  │     NOTIFICATION    │
+                  │                     │
+                  │   Discord / Email   │
+                  └─────────────────────┘
 ```
 
 ---
 
-## 🔄 Security Incident Workflow
+# 🎯 Objectives
 
-The automated incident-response process follows these main stages:
+The platform was designed to achieve the following objectives:
 
-### 1. Event Collection
-
-Wazuh agents are deployed on monitored endpoints and collect security-related events such as:
-
-* Authentication events
-* Failed login attempts
-* Process activity
-* File integrity changes
-* System events
-* Malware-related events
-* Configuration changes
-* Network-related events
-
-The collected events are transmitted to the centralized Wazuh infrastructure.
+| Objective               | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| 🔍 **Monitoring**       | Collect and monitor security events from multiple endpoints |
+| 🚨 **Detection**        | Detect suspicious and malicious activities                  |
+| 🧠 **Correlation**      | Analyze events using Wazuh rules and detection logic        |
+| ⚙️ **Automation**       | Automate repetitive incident-response tasks                 |
+| 🔬 **Enrichment**       | Analyze suspicious indicators using Cortex                  |
+| 📋 **Investigation**    | Manage incidents through TheHive                            |
+| 📢 **Notification**     | Deliver alerts through Discord and Email                    |
+| 🐳 **Containerization** | Deploy the infrastructure using Docker                      |
+| 🔐 **Secure Access**    | Use Traefik as a controlled reverse-proxy entry point       |
 
 ---
 
-### 2. Detection
+# 🏗️ Architecture
 
-Wazuh analyzes incoming events using its detection and correlation capabilities.
+The architecture follows a **distributed collection + centralized analysis + automated response** model.
 
-When an event matches a detection rule, Wazuh generates a security alert containing information such as:
-
-* Alert ID
-* Rule ID
-* Rule description
-* Severity level
-* Timestamp
-* Source IP
-* Destination information
-* Host information
-* User information
-* Log data
-
----
-
-### 3. Alert Forwarding
-
-The Wazuh alert is forwarded to the SOAR platform through an **HTTP webhook/API integration**.
-
-Traefik can act as the controlled entry point for services exposed through HTTP/HTTPS.
+### Infrastructure Layer
 
 ```text
-Wazuh
-   │
-   │ Alert
-   ▼
-Traefik
-   │
-   │ HTTP/HTTPS
-   ▼
-Shuffle Webhook
+                         MONITORED INFRASTRUCTURE
+
+       ┌────────────┐     ┌────────────┐     ┌────────────┐
+       │ Windows PC │     │ Linux Host │     │   Server   │
+       │  Wazuh     │     │   Wazuh    │     │   Wazuh    │
+       │   Agent    │     │   Agent    │     │   Agent    │
+       └─────┬──────┘     └─────┬──────┘     └─────┬──────┘
+             │                  │                  │
+             └──────────────────┼──────────────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │   CENTRAL WAZUH     │
+                     │      MANAGER        │
+                     └─────────────────────┘
+```
+
+### SOC / Automation Layer
+
+```text
+                         ┌──────────────────┐
+                         │      WAZUH       │
+                         │       SIEM       │
+                         └────────┬─────────┘
+                                  │
+                                  │ Alert
+                                  ▼
+                         ┌──────────────────┐
+                         │     TRAEFIK      │
+                         │  Secure Gateway  │
+                         └────────┬─────────┘
+                                  │
+                                  ▼
+                         ┌──────────────────┐
+                         │     SHUFFLE      │
+                         │       SOAR       │
+                         └───────┬───┬──────┘
+                                 │   │
+                    ┌────────────┘   └────────────┐
+                    ▼                             ▼
+             ┌──────────────┐              ┌──────────────┐
+             │    CORTEX    │              │   THEHIVE    │
+             │   Analysis   │              │   Incident   │
+             │  & Enrich.   │              │   Management │
+             └──────────────┘              └───────┬──────┘
+                                                   │
+                                                   ▼
+                                      ┌──────────────────────┐
+                                      │     NOTIFICATION     │
+                                      │                      │
+                                      │  Discord  •  Email  │
+                                      └──────────────────────┘
 ```
 
 ---
 
-### 4. SOAR Automation
+# 🔄 Automated Incident Response
 
-Shuffle receives the Wazuh alert and starts an automated workflow.
-
-The workflow can:
-
-1. Receive the Wazuh alert.
-2. Extract relevant observables.
-3. Determine the alert severity.
-4. Extract IP addresses, domains, hashes or other indicators.
-5. Send observables to Cortex.
-6. Execute Cortex analyzers.
-7. Enrich the security information.
-8. Create an incident/case in TheHive.
-9. Add the investigation information to the case.
-10. Notify the security administrator.
-
----
-
-## 🧠 SOAR Workflow
-
-A simplified workflow can be represented as:
+The main workflow transforms a raw security event into an automated incident-response process.
 
 ```text
-                 WAZUH ALERT
-                      │
-                      ▼
-               SHUFFLE WEBHOOK
-                      │
-                      ▼
-              Parse Alert Data
-                      │
-                      ▼
-             Extract Observables
-                      │
-             ┌────────┴────────┐
-             │                 │
-             ▼                 ▼
-        IP / Domain         File Hash
-             │                 │
-             └────────┬────────┘
-                      ▼
-                    CORTEX
-                      │
-              Observable Analysis
-                      │
-                      ▼
-             Enrichment Results
-                      │
-                      ▼
-                  THEHIVE
-                      │
-                Create Case
-                      │
-             ┌────────┴────────┐
-             │                 │
-             ▼                 ▼
-          DISCORD            EMAIL
-          Alert              Alert
+  ┌─────────────┐
+  │   EVENT     │
+  │  Detected   │
+  └──────┬──────┘
+         │
+         ▼
+  ┌─────────────┐
+  │    WAZUH    │
+  │   Detect    │
+  └──────┬──────┘
+         │
+         │ Alert
+         ▼
+  ┌─────────────┐
+  │   SHUFFLE   │
+  │  Automate   │
+  └──────┬──────┘
+         │
+         ├─────────────────────┐
+         │                     │
+         ▼                     ▼
+  ┌─────────────┐       ┌─────────────┐
+  │   CORTEX    │       │   THEHIVE   │
+  │ IOC Enrich. │       │ Create Case │
+  └──────┬──────┘       └──────┬──────┘
+         │                     │
+         └──────────┬──────────┘
+                    │
+                    ▼
+            ┌───────────────┐
+            │   NOTIFY SOC  │
+            └───────┬───────┘
+                    │
+             ┌──────┴──────┐
+             ▼             ▼
+        ┌─────────┐   ┌─────────┐
+        │ Discord │   │  Email  │
+        └─────────┘   └─────────┘
 ```
 
 ---
 
-# 🧩 Components
+# 🧩 Technology Stack
 
-## Wazuh
+## 🛡️ Wazuh — SIEM
 
-Wazuh is the main SIEM and security monitoring component.
+Wazuh is the core security monitoring and detection component.
 
-It is responsible for:
+### Responsibilities
 
 * Endpoint monitoring
 * Log collection
@@ -239,86 +213,107 @@ It is responsible for:
 * Vulnerability detection
 * Security rule processing
 * Alert generation
-* Endpoint security monitoring
-
-Wazuh agents are installed on monitored systems and communicate with the centralized Wazuh manager.
-
----
-
-## Traefik
-
-Traefik is used as the **reverse proxy and entry point** for the platform.
-
-Its responsibilities include:
-
-* HTTP/HTTPS routing
-* Reverse proxying
-* Service discovery
-* Centralized entry point
-* Secure service exposure
-* Routing requests to internal services
-
-Instead of directly exposing every application port, Traefik can provide controlled access to the required services.
-
----
-
-## Shuffle
-
-Shuffle is the **SOAR component** of the architecture.
-
-It provides automated security workflows and orchestration between the different security tools.
-
-Shuffle can communicate with:
-
-* Wazuh
-* TheHive
-* Cortex
-* Discord
-* Email services
-* REST APIs
-* Other security tools
-
-Example workflow:
+* Agent management
 
 ```text
-Wazuh Alert
-     ↓
-Shuffle
-     ↓
-Extract IOC
-     ↓
-Cortex Analysis
-     ↓
-TheHive Case
-     ↓
-Discord / Email Notification
+Endpoints
+    │
+    ▼
+Wazuh Agents
+    │
+    ▼
+Wazuh Manager
+    │
+    ▼
+Security Alerts
 ```
 
 ---
 
-## TheHive
+## 🚦 Traefik — Reverse Proxy
 
-TheHive is used as the **Security Incident Response and Case Management platform**.
+Traefik provides the controlled network entry point for services.
 
-It allows security analysts to:
+### Responsibilities
 
-* Create security cases
-* Track incidents
-* Organize investigations
-* Store observables
-* Assign tasks
-* Track investigation status
-* Centralize incident information
+* Reverse proxy
+* HTTP/HTTPS routing
+* Service discovery
+* Centralized access point
+* Secure service exposure
+* Internal service routing
 
-A Wazuh alert can automatically result in the creation of a TheHive case through Shuffle.
+```text
+                    Internet / LAN
+                          │
+                          ▼
+                   ┌────────────┐
+                   │  TRAEFIK   │
+                   └─────┬──────┘
+                         │
+              ┌──────────┼──────────┐
+              ▼          ▼          ▼
+           Wazuh      Shuffle    TheHive
+```
 
 ---
 
-## Cortex
+## ⚙️ Shuffle — SOAR
 
-Cortex is used for **automated observable analysis and enrichment**.
+Shuffle is responsible for **Security Orchestration, Automation and Response**.
 
-Depending on the configured analyzers, Cortex can analyze observables such as:
+It connects the different security components and executes automated workflows.
+
+### Example
+
+```text
+Wazuh Alert
+     │
+     ▼
+Shuffle Webhook
+     │
+     ▼
+Parse Alert
+     │
+     ▼
+Extract IOC
+     │
+     ▼
+Cortex
+     │
+     ▼
+Enrichment
+     │
+     ▼
+TheHive
+     │
+     ▼
+Notification
+```
+
+---
+
+## 🐝 TheHive — Incident Management
+
+TheHive provides centralized security case management.
+
+It allows analysts to:
+
+* Create cases
+* Track incidents
+* Store observables
+* Assign investigation tasks
+* Document findings
+* Track incident status
+* Centralize investigation information
+
+---
+
+## 🔬 Cortex — Observable Analysis
+
+Cortex is used to analyze and enrich suspicious observables.
+
+Potential observables include:
 
 * IP addresses
 * Domains
@@ -326,188 +321,151 @@ Depending on the configured analyzers, Cortex can analyze observables such as:
 * File hashes
 * Other indicators of compromise
 
-The analysis results can then be returned to Shuffle and associated with the corresponding TheHive case.
+```text
+             Observable
+                  │
+                  ▼
+             ┌─────────┐
+             │ CORTEX  │
+             └────┬────┘
+                  │
+          ┌───────┼───────┐
+          ▼       ▼       ▼
+        IP       Hash    Domain
+          │       │       │
+          └───────┼───────┘
+                  ▼
+             Enrichment
+                  │
+                  ▼
+              TheHive
+```
 
 ---
 
-## Discord
+# 📢 Notifications
 
-Discord is used as a real-time notification channel.
+The platform supports multiple notification channels.
 
-When a significant security incident is detected, Shuffle can automatically send a notification containing information such as:
+### Discord
+
+Real-time security notifications can be sent to a dedicated security channel.
+
+Example:
 
 ```text
 🚨 SECURITY ALERT
 
-Severity: High
+Severity: HIGH
 Rule: Multiple SSH Authentication Failures
-Source IP: x.x.x.x
 Host: Ubuntu-Server
-Time: 2026-09-01 12:30
+Source IP: 192.168.X.X
 
-A security incident has been automatically created
-in TheHive.
+Status: Investigation Created
+TheHive: Case #12345
 ```
 
----
+### Email
 
-## Email
-
-Email provides an additional notification mechanism for security administrators.
-
-The automated workflow can send:
+Email notifications can provide a more formal incident notification containing:
 
 * Alert severity
 * Detection rule
 * Affected host
-* Source IP
-* Observable information
+* Source information
+* Observable details
 * Investigation status
 * TheHive case reference
 
-This provides an alternative notification channel when Discord is unavailable or when email is preferred for incident tracking.
-
 ---
 
-# 🐳 Containerization
+# 🐳 Docker Architecture
 
-The platform is deployed using **Docker and Docker Compose**.
-
-Example service architecture:
+The platform is containerized using **Docker / Docker Compose**.
 
 ```text
-Docker Host
-│
-├── Wazuh Manager
-├── Wazuh Indexer
-├── Wazuh Dashboard
-│
-├── Traefik
-│
-├── Shuffle
-│   ├── Frontend
-│   ├── Backend
-│   ├── Database
-│   └── Orborus
-│
-├── TheHive
-│
-└── Cortex
+                    Docker Host
+                         │
+       ┌─────────────────┼──────────────────┐
+       │                 │                  │
+       ▼                 ▼                  ▼
+   ┌────────┐       ┌──────────┐      ┌──────────┐
+   │ Wazuh  │       │ Traefik  │      │ Shuffle  │
+   │ Stack  │       │          │      │  SOAR    │
+   └────────┘       └──────────┘      └──────────┘
+                                            │
+                                    ┌───────┴───────┐
+                                    ▼               ▼
+                               ┌─────────┐     ┌─────────┐
+                               │ TheHive │     │ Cortex  │
+                               └─────────┘     └─────────┘
 ```
-
-Containerization provides:
-
-* Isolation
-* Reproducible deployments
-* Simplified service management
-* Easier maintenance
-* Service scalability
-* Consistent environments
 
 ---
 
-# 🔐 Security Architecture
-
-The architecture is designed around the following security principles:
-
-### Centralized Monitoring
-
-Security events from multiple endpoints are collected and analyzed by a centralized Wazuh infrastructure.
-
-### Distributed Collection
-
-Wazuh agents can be deployed across multiple systems and environments.
-
-```text
-Endpoint 1 ─┐
-Endpoint 2 ─┤
-Endpoint 3 ─┼──► Wazuh Manager
-Endpoint 4 ─┤
-Endpoint N ─┘
-```
-
-### Automated Response
-
-SOAR workflows reduce the amount of manual work required from security analysts.
-
-### Incident Enrichment
-
-Cortex provides additional information about suspicious observables before or during investigation.
-
-### Centralized Incident Management
-
-TheHive provides a structured location for tracking security incidents.
-
-### Multi-Channel Notification
-
-Security alerts can be delivered through:
-
-* Discord
-* Email
-
----
-
-# 📁 Suggested Project Structure
+# 📂 Project Structure
 
 ```text
 siem-soar-platform/
 │
-├── README.md
+├── 📄 README.md
 │
-├── wazuh/
+├── 📁 wazuh/
 │   ├── docker-compose.yml
 │   ├── config/
 │   └── rules/
 │
-├── traefik/
+├── 📁 traefik/
 │   ├── docker-compose.yml
-│   
-│  
+│   ├── dynamic/
+│   └── certs/
 │
-├── shuffle/
+├── 📁 shuffle/
 │   ├── docker-compose.yml
 │   └── workflows/
 │
-├── thehive/
+├── 📁 thehive/
 │   ├── docker-compose.yml
 │   └── config/
 │
-├── cortex/
+├── 📁 cortex/
 │   ├── docker-compose.yml
 │   └── config/
 │
-├── workflows/
-│   ├── wazuh-to-thehive.json
+├── 📁 workflows/
+│   ├── wazuh-to-shuffle.json
 │   ├── cortex-enrichment.json
-│   └── notifications.json
+│   └── notification.json
 │
-├── diagrams/
+├── 📁 diagrams/
 │   ├── architecture.drawio
 │   └── architecture.png
 │
-└── docs/
+└── 📁 docs/
     ├── installation.md
     ├── configuration.md
-    ├── incident-response.md
+    ├── workflows.md
     └── troubleshooting.md
 ```
 
 ---
 
-# 🚀 Main Use Case
+# 🧪 Example Use Case
 
-### Example: Brute-Force SSH Detection
+## SSH Brute-Force Detection
 
-A monitored Linux server receives multiple failed SSH authentication attempts.
+Consider a Linux server receiving multiple failed SSH authentication attempts.
+
+### Detection
 
 ```text
 Attacker
    │
-   │ Multiple SSH attempts
+   │ SSH Attempts
    ▼
 Linux Server
    │
-   │ Logs
+   │ Authentication Logs
    ▼
 Wazuh Agent
    │
@@ -517,122 +475,200 @@ Wazuh Manager
    │ Detection Rule
    ▼
 Security Alert
-   │
-   ▼
-Shuffle
-   │
-   ├── Extract Source IP
-   │
-   ├── Send IP to Cortex
-   │
-   ├── Enrich Observable
-   │
-   ├── Create TheHive Case
-   │
-   └── Send Notification
-          │
-          ├── Discord
-          └── Email
 ```
 
-This transforms a raw security event into a structured and automated incident-response process.
-
----
-
-# 📊 Benefits
-
-The proposed platform provides several advantages:
-
-| Capability             | Solution                |
-| ---------------------- | ----------------------- |
-| Security monitoring    | Wazuh                   |
-| Log collection         | Wazuh Agents            |
-| Threat detection       | Wazuh                   |
-| Reverse proxy          | Traefik                 |
-| SOAR automation        | Shuffle                 |
-| Incident management    | TheHive                 |
-| IOC enrichment         | Cortex                  |
-| Real-time notification | Discord                 |
-| Email notification     | Email                   |
-| Deployment             | Docker / Docker Compose |
-
----
-
-# 🛠️ Technologies Used
+### Automated Response
 
 ```text
-Docker
-Docker Compose
-Linux
-Wazuh
-Traefik
-Shuffle
-TheHive
-Cortex
-Discord
-Email
-HTTP / REST API
-Webhooks
-SOAR
-SIEM
-HIDS
-Incident Response
-Threat Intelligence
+Security Alert
+      │
+      ▼
+   Shuffle
+      │
+      ├──────────────► Extract Source IP
+      │
+      ▼
+    Cortex
+      │
+      └──────────────► Analyze IP
+                            │
+                            ▼
+                       Enrichment
+                            │
+                            ▼
+                         TheHive
+                            │
+                            ├──────► Create Case
+                            │
+                            ▼
+                       Notification
+                       ┌────┴────┐
+                       ▼         ▼
+                    Discord    Email
 ```
+
+### Result
+
+A single suspicious event can automatically trigger:
+
+**Detection → Analysis → Enrichment → Case Creation → Notification**
+
+with minimal manual intervention.
+
+---
+
+# 📊 Platform Capabilities
+
+```text
+┌────────────────────────────────────────────────────┐
+│                 SECURITY PLATFORM                  │
+├────────────────────────────────────────────────────┤
+│                                                    │
+│  🔍 Monitoring              Wazuh                  │
+│  🚨 Detection               Wazuh                  │
+│  🔗 Integration             Traefik / APIs        │
+│  ⚙️ Automation              Shuffle                │
+│  🔬 IOC Enrichment          Cortex                 │
+│  🐝 Incident Management     TheHive                │
+│  📢 Notifications           Discord / Email        │
+│  🐳 Deployment              Docker                 │
+│                                                    │
+└────────────────────────────────────────────────────┘
+```
+
+---
+
+# 🔐 Security Design Principles
+
+The platform is based on several security principles:
+
+### Centralized Security Monitoring
+
+Security events from multiple endpoints are collected and analyzed centrally.
+
+### Distributed Endpoint Collection
+
+Wazuh agents can be deployed across multiple operating systems and infrastructure components.
+
+### Automated Response
+
+Shuffle minimizes repetitive manual operations by orchestrating security workflows.
+
+### Indicator Enrichment
+
+Cortex provides additional context about suspicious observables.
+
+### Centralized Case Management
+
+TheHive provides a structured environment for incident investigation and tracking.
+
+### Controlled Service Exposure
+
+Traefik acts as a centralized reverse-proxy layer rather than exposing every application directly.
+
+### Multi-Channel Alerting
+
+Security teams can receive notifications through multiple communication channels.
 
 ---
 
 # 📈 Future Improvements
 
-Possible future improvements include:
+The platform can be extended with:
 
-* Integration with additional threat-intelligence platforms.
-* Automated IP blocking.
-* Automated firewall actions.
-* Integration with EDR solutions.
-* Integration with additional notification platforms.
-* Advanced Wazuh correlation rules.
-* Automated incident severity classification.
-* Automated IOC blocking.
-* Integration with MITRE ATT&CK techniques.
-* High-availability Wazuh deployment.
-* Centralized monitoring of multiple infrastructure environments.
-* Backup and disaster-recovery mechanisms.
-* TLS encryption for internal and external communications.
+* 🔥 Automated firewall blocking
+* 🚫 Automated IP blocking
+* 🧠 Additional threat-intelligence integrations
+* 🛡️ EDR integration
+* 🔎 Advanced Wazuh detection rules
+* 🤖 More advanced SOAR workflows
+* 🗺️ MITRE ATT&CK mapping
+* 📊 SOC dashboards
+* 🔐 TLS for internal services
+* 💾 Automated backups
+* ♻️ Disaster recovery
+* 📈 High-availability architecture
+* 📡 Additional notification channels
 
 ---
 
-# 👨‍💻 Project Goal
+# 🧠 Security Operations Workflow
 
-The ultimate goal of this project is to build a **centralized security operations platform capable of detecting, enriching, managing, and responding to security incidents automatically**.
-
-The combination of **SIEM + SOAR + Incident Response + Automated Enrichment + Multi-Channel Notification** provides a foundation for a small-scale **Security Operations Center (SOC)** environment.
+The complete concept can be summarized as:
 
 ```text
-        DETECT
-          │
-          ▼
-       WAZUH
-          │
-          ▼
-      AUTOMATE
-          │
-          ▼
-      SHUFFLE
-       │     │
-       ▼     ▼
-    CORTEX  THEHIVE
-       │     │
-       └──┬──┘
-          ▼
-       NOTIFY
-       │     │
-       ▼     ▼
-    DISCORD EMAIL
+                  ┌─────────────┐
+                  │   MONITOR   │
+                  └──────┬──────┘
+                         ▼
+                  ┌─────────────┐
+                  │   DETECT    │
+                  │    WAZUH    │
+                  └──────┬──────┘
+                         ▼
+                  ┌─────────────┐
+                  │   ROUTE     │
+                  │   TRAEFIK   │
+                  └──────┬──────┘
+                         ▼
+                  ┌─────────────┐
+                  │  AUTOMATE   │
+                  │   SHUFFLE   │
+                  └──────┬──────┘
+                         │
+              ┌──────────┴──────────┐
+              ▼                     ▼
+       ┌─────────────┐       ┌─────────────┐
+       │   ANALYZE   │       │  INVESTIGATE│
+       │   CORTEX    │       │   THEHIVE   │
+       └──────┬──────┘       └──────┬──────┘
+              │                     │
+              └──────────┬──────────┘
+                         ▼
+                  ┌─────────────┐
+                  │   NOTIFY    │
+                  └──────┬──────┘
+                         │
+                    ┌────┴────┐
+                    ▼         ▼
+                 Discord     Email
 ```
 
 ---
 
-## 📜 License
+# 🏁 Project Goal
 
-This project is intended for educational, research, and cybersecurity laboratory purposes.
+The goal of this project is to build a **centralized, automated and scalable security operations platform** capable of transforming raw security events into actionable incidents.
+
+The combination of:
+
+> **SIEM + SOAR + IOC Enrichment + Incident Management + Automated Notifications**
+
+creates a complete security monitoring and incident-response workflow suitable for a **SOC laboratory, academic project, cybersecurity research environment, or small-scale production deployment**.
+
+---
+
+# 🛠️ Technologies
+
+| Category            | Technology          |
+| ------------------- | ------------------- |
+| 🛡️ SIEM            | Wazuh               |
+| 🚦 Reverse Proxy    | Traefik             |
+| ⚙️ SOAR             | Shuffle             |
+| 🐝 Case Management  | TheHive             |
+| 🔬 Analysis         | Cortex              |
+| 📢 Notification     | Discord / Email     |
+| 🐳 Containerization | Docker              |
+| 📦 Orchestration    | Docker Compose      |
+| 🔗 Integration      | REST API / Webhooks |
+| 🐧 Infrastructure   | Linux               |
+
+---
+
+<p align="center">
+
+### 🛡️ Detect • Automate • Investigate • Respond
+
+**Distributed SIEM & SOAR Security Platform**
+
+</p>
