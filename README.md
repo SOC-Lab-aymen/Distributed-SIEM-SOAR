@@ -403,52 +403,7 @@ The platform is containerized using **Docker / Docker Compose**.
 
 ---
 
-# 📂 Project Structure
 
-```text
-siem-soar-platform/
-│
-├── 📄 README.md
-│
-├── 📁 wazuh/
-│   ├── docker-compose.yml
-│   ├── config/
-│   └── rules/
-│
-├── 📁 traefik/
-│   ├── docker-compose.yml
-│   ├── dynamic/
-│   └── certs/
-│
-├── 📁 shuffle/
-│   ├── docker-compose.yml
-│   └── workflows/
-│
-├── 📁 thehive/
-│   ├── docker-compose.yml
-│   └── config/
-│
-├── 📁 cortex/
-│   ├── docker-compose.yml
-│   └── config/
-│
-├── 📁 workflows/
-│   ├── wazuh-to-shuffle.json
-│   ├── cortex-enrichment.json
-│   └── notification.json
-│
-├── 📁 diagrams/
-│   ├── architecture.drawio
-│   └── architecture.png
-│
-└── 📁 docs/
-    ├── installation.md
-    ├── configuration.md
-    ├── workflows.md
-    └── troubleshooting.md
-```
-
----
 
 # 🧪 Example Use Case
 
